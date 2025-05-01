@@ -1,0 +1,14 @@
+si pas d'env faut rajouter :
+    PWD=/home/picatrai/new-minishell
+    SHLVL=1
+    _=/usr/bin/env
+
+
+mettre a jour l'env
+    shell lvl
+    dernier commande
+    PWD
+    exit status
+
+question
+    pourquoi dans l'ancien je prennais pas les tokens vides
