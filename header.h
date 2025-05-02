@@ -18,24 +18,32 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 
-#define SUCCESS 0
-#define FAILURE 1
-
-
-
-enum    error
+enum    status
 {
-    ERROR_CONFIG = 2,
+    SUCCESS = 0,
+    FAILURE,
+    ERROR_CONFIG,
     ERROR_MALLOC,
+    ERROR_FILE
 };
 
-enum    quotes_type
+enum    grammaire
 {
-    NO_QUOTE = 0,
-    SINGLES_QUOTES,
-    DOUBLES_QUOTES,
+    UNDEFINED = 0,
+    CMD,
+    ARG,
+    INFILE,
+    OUTFILE,
+    HEREDOC,
+    APPEND,
+    INFILE_TEXT,
+    OUTFILE_TEXT,
+    HEREDOC_TEXT,
+    APPEND_TEXT,
+    PIPE,
 };
 
 typedef struct s_env
@@ -57,6 +65,7 @@ typedef struct s_token
 typedef struct s_data
 {
     t_env  *env;
+    int exit_status;
 
 } t_data;
 
@@ -64,8 +73,14 @@ int	ft_strlen(char *str);
 void    ft_putstr_fd(char *str, int fd);
 char	*ft_strdup(char *str);
 void ft_print_2d_fd(char **str, int fd);
-char *ft_append(char *str, char c);
+int ft_append(char **str, char c);
 int is_whitespace(char c);
+int ft_join_2d(char ***tab, char *str);
+void	free_2d(char **str);
+int	ft_strlen_2d(char **str);
+int	ft_strcmp(char *str1, char *str2);
+int ft_join(char **str1, char *str2);
+int ft_itoa(char **str, int nbr);
 
 int ft_duplicate_envp(char **envp, t_data *data);
 
@@ -77,12 +92,18 @@ void t_env_free(t_env **env);
 void	t_env_print(t_env *env, int fd);
 
 int ft_parsing(char *input, t_data *data);
-int ft_tokenisation(char *input, t_token **token);
 
 int	t_token_add_back(t_token **ls, t_token *new);
 t_token	*t_token_last(t_token *ls);
 t_token	*t_token_new(void);
 void t_token_free(t_token **token);
 void	t_token_print(t_token *token, int fd, int mode);
+
+
+int make_token(char *input, t_token **token);
+int isolate_meta_cara(t_token **token);
+int check_quotes_closes(char *str);
+
+int expand(t_token **token, t_data *data);
 
 #endif

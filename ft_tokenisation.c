@@ -30,48 +30,6 @@ int check_quotes_closes(char *str)
     return SUCCESS;
 }
 
-// int make_token(char *input, t_token **token)
-// {
-//     int i = -1;
-//     int singles = -1;
-//     int doubles = -1;
-//     int completing = -1;
-
-//     while (input[++i])
-//     {
-//         if (input[i] == '\'' && doubles == -1)
-//         {
-//             singles *= -1;
-//             if (completing == 1 && singles == 1 && t_token_add_back(token, t_token_new(SINGLES_QUOTES)) != SUCCESS)
-//                 return FAILURE;
-//         }
-//         else if (input[i] == '"' && singles == -1)
-//         {
-//             doubles *= -1;
-//             if (completing == 1 && doubles == 1 && t_token_add_back(token, t_token_new(DOUBLES_QUOTES)) != SUCCESS)
-//                 return FAILURE;
-//         }
-//         else
-//         {
-//             if (((i == 0 && is_whitespace(input[i]) == FAILURE) || (i != 0 && is_whitespace(input[i - 1]) == SUCCESS && is_whitespace(input[i]) == FAILURE)) && singles == -1 && doubles == -1)
-//             {
-//                 if (t_token_add_back(token, t_token_new(NO_QUOTE)) != SUCCESS)
-//                     return FAILURE;
-//             }
-
-//             if (is_whitespace(input[i]) == FAILURE || singles == 1 || doubles == 1)
-//             {
-//                 t_token_last(*token)->str = ft_append((t_token_last(*token)->str), input[i]);
-//                 if (t_token_last(*token)->str == NULL)
-//                     return FAILURE;
-                
-//                 if (completing == 1)
-//             }
-//         }
-//     }
-//     return SUCCESS;
-// }
-
 
 int make_token(char *input, t_token **token)
 {
@@ -92,9 +50,8 @@ int make_token(char *input, t_token **token)
                     return FAILURE;   
                 completing = 1;
             }
-            t_token_last(*token)->str = ft_append((t_token_last(*token)->str), input[i]);
-            if (t_token_last(*token)->str == NULL)
-                return FAILURE;
+            if (ft_append((&(t_token_last(*token)->str)), input[i]) != SUCCESS)
+                return ERROR_MALLOC;
 
             if (input[i] == '\'' && doubles == -1)
                 singles *= -1;
@@ -105,42 +62,139 @@ int make_token(char *input, t_token **token)
     return SUCCESS;
 }
 
+int split_meta_cara(char *str, char ***splited)
+{
+    int i = -1;
+    int singles = -1;
+    int doubles = -1;
+    char *mini_splited;
+
+    mini_splited = NULL;
+
+
+    while (str[++i])
+    {
+        if (str[i] == '\'' && doubles == -1)
+            singles *= -1;
+        else if (str[i] == '"' && singles == -1)
+            doubles *= -1;
+        
+        if ((str[i] == '<' || str[i] == '>' || str[i] == '|') && singles == -1 && doubles == -1)
+        {
+            if (ft_join_2d(splited, mini_splited) != SUCCESS)
+                return ERROR_MALLOC;
+            mini_splited = NULL;
+            if (str[i] == str[i + 1] && (str[i] == '<' || str[i] == '>'))
+            {
+                if (ft_append(&mini_splited, str[i]) != SUCCESS)
+                    return (free_2d(*splited), ERROR_MALLOC);
+                if (ft_append(&mini_splited, str[i + 1]) != SUCCESS)
+                    return (free_2d(*splited), ERROR_MALLOC);
+                if (ft_join_2d(splited, mini_splited) != SUCCESS)
+                    return ERROR_MALLOC;
+                mini_splited = NULL;
+                i++;
+            }
+            else
+            {
+                if (ft_append(&mini_splited, str[i]) != SUCCESS)
+                    return (free_2d(*splited), ERROR_MALLOC);
+                if (ft_join_2d(splited, mini_splited) != SUCCESS)
+                    return ERROR_MALLOC;
+                mini_splited = NULL;
+            }
+        }
+        else
+        {
+            if (ft_append(&mini_splited, str[i]) != SUCCESS)
+                return (free_2d(*splited), ERROR_MALLOC);
+        }
+    }
+    if (mini_splited != NULL)
+    {
+        
+        if (ft_join_2d(splited, mini_splited) != SUCCESS)
+            return ERROR_MALLOC;
+
+    }
+    return (SUCCESS);
+}
+
+int insert_token(t_token **token, char **splited)
+{
+    t_token *prev;
+    t_token *next;
+    t_token *new;
+    t_token *tmp;
+    int i = -1;
+
+    prev = (*token)->prev;
+    next = (*token)->next;
+    new = NULL;
+
+    while (splited[++i])
+    {
+        if (t_token_add_back(&new, t_token_new()) != SUCCESS)
+            return (free_2d(splited), t_token_free(&new), ERROR_MALLOC);
+        t_token_last(new)->str = splited[i];
+        if (ft_strcmp(splited[i], "|") == 0)
+            t_token_last(new)->grammaire = PIPE;
+        else if (ft_strcmp(splited[i], "<") == 0)
+            t_token_last(new)->grammaire = INFILE;
+        else if (ft_strcmp(splited[i], "<<") == 0)
+            t_token_last(new)->grammaire = HEREDOC;
+        else if (ft_strcmp(splited[i], ">") == 0)
+            t_token_last(new)->grammaire = OUTFILE;
+        else if (ft_strcmp(splited[i], ">>") == 0)
+            t_token_last(new)->grammaire = APPEND;
+    }
+    tmp = *token;
+    *token = t_token_last(new);
+    if (prev != NULL)
+    {
+        prev->next = new;
+        new->prev = prev;
+    }
+    if (next != NULL)
+    {
+        next->prev = t_token_last(new);
+        t_token_last(new)->next = next;
+    }
+
+    free(tmp->str);
+    free(tmp);
+    free(splited);
+
+    return SUCCESS;
+}
+
 int isolate_meta_cara(t_token **token)
 {
     while (*token)
     {
-        int i = -1;
-        int singles = -1;
-        int doubles = -1;
+        char **splited;
 
-        while ((*token)->str[++i])
+        splited = NULL;
+
+        if (split_meta_cara((*token)->str, &splited) != SUCCESS)
+            return ERROR_MALLOC;
+        if (ft_strlen_2d(splited) == 1)
+            free_2d(splited);
+        else
         {
-            if ((*token)->str[i] == '\'' && doubles == -1)
-                singles *= -1;
-            else if ((*token)->str[i] == '"' && singles == -1)
-                doubles *= -1;
+            if (insert_token(token, splited) != SUCCESS)
+                return FAILURE;
         }
         
-        *token = (*token)->next;
+        
+        if ((*token)->next != NULL)
+            *token = (*token)->next;
+        else
+            break;
+
     }
     while ((*token)->prev != NULL)
         *token = (*token)->prev;
 
     return SUCCESS;
-}
-
-int ft_tokenisation(char *input, t_token **token)
-{
-    if (check_quotes_closes(input))
-    {
-        ft_putstr_fd("minishell: syntax error with open quotes\n", 2);
-        return FAILURE;
-    }
-
-    if (make_token(input, token) != SUCCESS)
-        return (t_token_free(token), FAILURE);
-    
-    if (isolate_meta_cara(token) != SUCCESS)
-        return (t_token_free(token), FAILURE);
-    
 }

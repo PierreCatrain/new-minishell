@@ -10,5 +10,11 @@ mettre a jour l'env
     PWD
     exit status
 
+bloquer quand on a trop de fichier ouvert
+
 question
     pourquoi dans l'ancien je prennais pas les tokens vides
+
+    que ce passe t il si on change les droits de proc/self/stat
+
+    changer le atoi

@@ -22,6 +22,7 @@ t_token	*t_token_new(void)
 	new->prev = NULL;
 	new->next = NULL;
 	new->str = NULL;
+	new->grammaire = UNDEFINED;
 	return (new);
 }
 
@@ -78,4 +79,46 @@ void	t_token_print(t_token *token, int fd, int mode)
             printf("|||%d\n", token->grammaire);
 		token = token->next;
 	}
+}
+
+int	ft_strlen_2d(char **str)
+{
+	int	index;
+
+	if (str == NULL)
+		return (0);
+	index = 0;
+	while (str[index])
+		index++;
+	return (index);
+}
+
+void	free_2d(char **str)
+{
+	int	index;
+
+	if (str == NULL)
+		return ;
+	index = -1;
+	while (str[++index])
+		free(str[index]);
+	free(str);
+}
+
+int ft_join_2d(char ***tab, char *str)
+{
+	char	**new;
+	int		index;
+
+	new = malloc((ft_strlen_2d(*tab) + 2) * sizeof(char *));
+	if (new == NULL)
+		return (free_2d(*tab), free(str), ERROR_MALLOC);
+	index = -1;
+	while (*tab && (*tab)[++index])
+		new[index] = (*tab)[index];
+	new[ft_strlen_2d(*tab)] = str;
+	new[ft_strlen_2d(*tab) + 1] = NULL;
+	free(*tab);
+	*tab = new;
+	return (SUCCESS);
 }

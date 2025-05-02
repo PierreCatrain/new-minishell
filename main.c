@@ -33,6 +33,8 @@ int main(int argc, char **argv, char **envp)
 {
     t_data data;
 
+    data.exit_status = 0;
+
     if (argc != 1)
     {
         ft_putstr_fd("pas besoin d'argument(s)\n", 2);
