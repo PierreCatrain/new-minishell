@@ -12,23 +12,7 @@
 
 #include "header.h"
 
-int	is_input_only_whitespace(char *str)
-{
-	int	index;
-
-	if (str == NULL)
-		return (SUCCESS);
-	index = 0;
-	while (str[index])
-	{
-		if (str[index] != ' ' && (str[index] < 9 || str[index] > 13))
-			return (FAILURE);
-		index++;
-	}
-	return (SUCCESS);
-}
-
-int ft_parsing(char *input, t_data *data)
+int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
 {
     t_token *token;
 
@@ -37,13 +21,13 @@ int ft_parsing(char *input, t_data *data)
     if (is_input_only_whitespace(input) == FAILURE)
         add_history(input);
     else
-        return SUCCESS;
+        return ERROR_ONLY_WHITESPACE;
 
 
     if (check_quotes_closes(input))
     {
         ft_putstr_fd("minishell: syntax error with open quotes\n", 2);
-        return FAILURE;
+        return ERROR_WITH_QUOTES;
     }
 
     // on fait les tokens
@@ -60,18 +44,24 @@ int ft_parsing(char *input, t_data *data)
     // t_token_print(token, 1, 1);
 
     // expand
-    if (expand(&token, data) != SUCCESS)
+    if (expand(&token, data) != SUCCESS)// a voir pour la gestion d erreur selon les droits du fichier /proc/self/stat
         return (t_token_free(&token), FAILURE);
-    printf("juste apres expand\n");
-        t_token_print(token, 1, 1);
+    // printf("juste apres expand\n");
+    //     t_token_print(token, 1, 2);
 
 
 
     // grammaire
+    if (grammaire(&token) != SUCCESS)
+        return (t_token_free(&token), ERROR_GRAMMAIRE);
+    printf("juste apres grammaire\n");
+        t_token_print(token, 1, 2);
 
     // on fait notre liste chainee
+    // a voir comment on gere les erreurs de fichier et les erreur de malloc et de heredoc
+    build_for_exec(token, exec, data);
 
-    // t_token_free(&token);
+    t_token_free(&token);
     
     
 

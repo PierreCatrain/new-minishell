@@ -67,14 +67,60 @@ void t_token_free(t_token **token)
 	}
 }
 
-// en fonction de ce que l'on veut montrer (1 pour juste str // 2 pour str + quotes // 3 pour str quotes grammaire)
+char *ft_trad_grammaire(int grammaire)
+{
+	char *trad[] = {
+        "UNDEFINED",
+        "CMD",
+        "ARG",
+		"INFLE_TEXT",
+        "OUTFILE_TEXT",
+        "HEREDOC_TEXT",
+        "APPEND_TEXT",
+        "INFILE",
+        "OUTFILE",
+        "HEREDOC",
+        "APPEND",
+        "PIPE"
+    };
+	return trad[grammaire];
+	// if (grammaire == 0)
+	// 	return "UNDEFINED";
+	// else if (grammaire == 1)
+	// 	return "CMD";
+	// else if (grammaire == 2)
+	// 	return "ARG";
+	// else if (grammaire == 3)
+	// 	return "INFILE";
+	// else if (grammaire == 4)
+	// 	return "OUTFILE";
+	// else if (grammaire == 5)
+	// 	return "HEREDOC";
+	// else if (grammaire == 6)
+	// 	return "APPEND";
+	// else if (grammaire == 7)
+	// 	return "INFLE_TEXT";
+	// else if (grammaire == 8)
+	// 	return "OUTFILE_TEXT";
+	// else if (grammaire == 9)
+	// 	return "HEREDOC_TEXT";
+	// else if (grammaire == 10)
+	// 	return "APPEND_TEXT";
+	// else if (grammaire == 11)
+	// 	return "PIPE";
+}
+
+// en fonction de ce que l'on veut montrer (1 pour juste str // 2 pour str + grammire)
 void	t_token_print(t_token *token, int fd, int mode)
 {
 	while (token->prev != NULL)
 		token = token->prev;
 	while (token)
 	{
-        printf("|%s|\n", token->str);
+		if (mode == 1)
+        	printf("|%s|\n", token->str);
+		else
+		printf("|%s|		%s\n", token->str, ft_trad_grammaire(token->grammaire));
         if (mode >= 3)
             printf("|||%d\n", token->grammaire);
 		token = token->next;
@@ -113,6 +159,26 @@ int ft_join_2d(char ***tab, char *str)
 	new = malloc((ft_strlen_2d(*tab) + 2) * sizeof(char *));
 	if (new == NULL)
 		return (free_2d(*tab), free(str), ERROR_MALLOC);
+	index = -1;
+	while (*tab && (*tab)[++index])
+		new[index] = (*tab)[index];
+	new[ft_strlen_2d(*tab)] = str;
+	new[ft_strlen_2d(*tab) + 1] = NULL;
+	free(*tab);
+	*tab = new;
+	return (SUCCESS);
+}
+
+
+// en cas de probleme on free pas str
+int ft_join_2d_spe(char ***tab, char *str)
+{
+	char	**new;
+	int		index;
+
+	new = malloc((ft_strlen_2d(*tab) + 2) * sizeof(char *));
+	if (new == NULL)
+		return (free_2d(*tab), ERROR_MALLOC);
 	index = -1;
 	while (*tab && (*tab)[++index])
 		new[index] = (*tab)[index];

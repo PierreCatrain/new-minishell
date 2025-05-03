@@ -37,23 +37,26 @@ int main(int argc, char **argv, char **envp)
 
     if (argc != 1)
     {
-        ft_putstr_fd("pas besoin d'argument(s)\n", 2);
+        ft_putstr_fd("minishell: pas besoin d'argument(s)\n", 2);
         return ERROR_CONFIG;
     }
     if (ft_duplicate_envp(envp, &data) == FAILURE)
     {
-        ft_putstr_fd("erreur en copiant l'env\n", 2);
+        ft_putstr_fd("minishell: erreur en copiant l'env\n", 2);
         return FAILURE;
     }
 
     while (1)
     {
         char *input;
-        
+        t_lst_exec *exec;
+
+        exec = NULL;
+
         input = readline("minishell ~ ");
         if (!input)
-			return (rl_clear_history(), ft_putstr_fd("exit\n", 1), t_env_free(&data.env), 0);
-        ft_parsing(input, &data);
+			return (ft_putstr_fd("exit\n", 1), t_env_free(&data.env), 0);
+        ft_parsing(input, &data, &exec);
     }
 
 

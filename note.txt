@@ -18,3 +18,5 @@ question
     que ce passe t il si on change les droits de proc/self/stat
 
     changer le atoi
+
+revoir le readline_heredoc

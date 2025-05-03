@@ -12,6 +12,22 @@
 
 #include "header.h"
 
+int	is_input_only_whitespace(char *str)
+{
+	int	index;
+
+	if (str == NULL)
+		return (SUCCESS);
+	index = 0;
+	while (str[index])
+	{
+		if (str[index] != ' ' && (str[index] < 9 || str[index] > 13))
+			return (FAILURE);
+		index++;
+	}
+	return (SUCCESS);
+}
+
 int check_quotes_closes(char *str)
 {
     int i = -1;
@@ -120,6 +136,20 @@ int split_meta_cara(char *str, char ***splited)
     return (SUCCESS);
 }
 
+void build_basic_grammire(t_token *token)
+{
+    if (ft_strcmp(token->str, "|") == 0)
+        token->grammaire = PIPE;
+    else if (ft_strcmp(token->str, "<") == 0)
+        token->grammaire = INFILE;
+    else if (ft_strcmp(token->str, "<<") == 0)
+        token->grammaire = HEREDOC;
+    else if (ft_strcmp(token->str, ">") == 0)
+        token->grammaire = OUTFILE;
+    else if (ft_strcmp(token->str, ">>") == 0)
+        token->grammaire = APPEND;
+}
+
 int insert_token(t_token **token, char **splited)
 {
     t_token *prev;
@@ -137,16 +167,7 @@ int insert_token(t_token **token, char **splited)
         if (t_token_add_back(&new, t_token_new()) != SUCCESS)
             return (free_2d(splited), t_token_free(&new), ERROR_MALLOC);
         t_token_last(new)->str = splited[i];
-        if (ft_strcmp(splited[i], "|") == 0)
-            t_token_last(new)->grammaire = PIPE;
-        else if (ft_strcmp(splited[i], "<") == 0)
-            t_token_last(new)->grammaire = INFILE;
-        else if (ft_strcmp(splited[i], "<<") == 0)
-            t_token_last(new)->grammaire = HEREDOC;
-        else if (ft_strcmp(splited[i], ">") == 0)
-            t_token_last(new)->grammaire = OUTFILE;
-        else if (ft_strcmp(splited[i], ">>") == 0)
-            t_token_last(new)->grammaire = APPEND;
+        build_basic_grammire(t_token_last(new));
     }
     tmp = *token;
     *token = t_token_last(new);
@@ -179,7 +200,10 @@ int isolate_meta_cara(t_token **token)
         if (split_meta_cara((*token)->str, &splited) != SUCCESS)
             return ERROR_MALLOC;
         if (ft_strlen_2d(splited) == 1)
+        {
+            build_basic_grammire(*token);
             free_2d(splited);
+        }
         else
         {
             if (insert_token(token, splited) != SUCCESS)

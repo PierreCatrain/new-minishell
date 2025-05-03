@@ -28,9 +28,12 @@ int ft_get_pid(char **pid)
 
     buffer[len] = '\0';
     close(fd);
-    *pid = ft_strdup(buffer);
-    if (*pid == NULL)
-        return FAILURE;
+    int i = -1;
+    while (buffer[++i] && buffer[i] != ' ')
+    {
+        if (ft_append(pid, buffer[i]) != SUCCESS)
+            return ERROR_MALLOC;
+    }
     return SUCCESS;
 }
 
@@ -69,6 +72,27 @@ int ft_get_env(char **res, char *to_find, t_env *env)
         else
             break;
     }
+}
+
+int replace_null_token_by_empty(t_token **token)
+{
+    while (*token)
+    {
+        if ((*token)->str == NULL)
+        {
+            char *new = malloc(1 * sizeof(char));
+            if (new == NULL)
+                return ERROR_MALLOC;
+            new[0] = '\0';
+            (*token)->str = new;
+        }
+        if ((*token)->next != NULL)
+            *token = (*token)->next;
+        else
+            break;
+    }
+    while ((*token)->prev != NULL)
+        *token = (*token)->prev;
 }
 
 int expand(t_token **token, t_data *data)
@@ -132,7 +156,7 @@ int expand(t_token **token, t_data *data)
                     return (ERROR_MALLOC);
             }
         }
-        // free((*token)->str);
+        free((*token)->str);
         (*token)->str = new;
 
 
@@ -147,4 +171,7 @@ int expand(t_token **token, t_data *data)
     }
     while ((*token)->prev != NULL)
         *token = (*token)->prev;
+
+    if (replace_null_token_by_empty(token) != SUCCESS)
+        return FAILURE;
 }

@@ -27,7 +27,10 @@ enum    status
     FAILURE,
     ERROR_CONFIG,
     ERROR_MALLOC,
-    ERROR_FILE
+    ERROR_FILE,
+    ERROR_GRAMMAIRE,
+    ERROR_ONLY_WHITESPACE,
+    ERROR_WITH_QUOTES
 };
 
 enum    grammaire
@@ -35,22 +38,22 @@ enum    grammaire
     UNDEFINED = 0,
     CMD,
     ARG,
-    INFILE,
-    OUTFILE,
-    HEREDOC,
-    APPEND,
     INFILE_TEXT,
     OUTFILE_TEXT,
     HEREDOC_TEXT,
     APPEND_TEXT,
+    INFILE,
+    OUTFILE,
+    HEREDOC,
+    APPEND,
     PIPE,
 };
 
 typedef struct s_env
 {
+	char    *str;
     struct s_env	*prev;
 	struct s_env	*next;
-	char    *str;
 } t_env;
 
 
@@ -60,7 +63,16 @@ typedef struct s_token
 	int					grammaire;
 	struct s_token		*prev;
 	struct s_token		*next;
-}						t_token;
+} t_token;
+
+typedef struct s_lst_exec
+{
+    char				**args;
+	int					fd_in;
+	int					fd_out;
+	struct s_lst_exec	*prev;
+	struct s_lst_exec	*next;
+} t_lst_exec;
 
 typedef struct s_data
 {
@@ -81,6 +93,8 @@ int	ft_strlen_2d(char **str);
 int	ft_strcmp(char *str1, char *str2);
 int ft_join(char **str1, char *str2);
 int ft_itoa(char **str, int nbr);
+char *ft_trad_grammaire(int grammaire);
+int	is_input_only_whitespace(char *str);
 
 int ft_duplicate_envp(char **envp, t_data *data);
 
@@ -91,7 +105,7 @@ t_env	*t_env_new(char *str);
 void t_env_free(t_env **env);
 void	t_env_print(t_env *env, int fd);
 
-int ft_parsing(char *input, t_data *data);
+int ft_parsing(char *input, t_data *data, t_lst_exec **exec);
 
 int	t_token_add_back(t_token **ls, t_token *new);
 t_token	*t_token_last(t_token *ls);
@@ -105,5 +119,16 @@ int isolate_meta_cara(t_token **token);
 int check_quotes_closes(char *str);
 
 int expand(t_token **token, t_data *data);
+
+int grammaire(t_token **token);
+
+int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data);
+
+int	t_lst_exec_add_back(t_lst_exec **ls, t_lst_exec *new);
+t_lst_exec	*t_lst_exec_last(t_lst_exec *ls);
+t_lst_exec	*t_lst_exec_new(void);
+void t_lst_exec_free_and_close(t_lst_exec **exec);
+
+char	*ft_readline_heredoc(char *lim);
 
 #endif
