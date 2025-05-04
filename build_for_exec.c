@@ -34,7 +34,7 @@ int count_heredoc(int **tab, t_token *token)
     return SUCCESS;
 }
 
-void free_close_tab_heredoc(char *tab)
+void free_close_tab_heredoc(int *tab)
 {
     int i = -1;
 
@@ -84,8 +84,8 @@ int	ft_complete_heredoc(int fd, char *lim, t_data *data)
 
 	if (ft_strcmp(line, lim) != 0)
 	{
-		if (ft_expand_here_doc(&line, data) != SUCCESS)//todo
-            return (FAILURE);
+		// if (ft_expand_here_doc(&line, data) != SUCCESS)//todo
+        //     return (FAILURE);
 		ft_putstr_fd(line, fd);
 		free(line);
 		if (ft_complete_heredoc(fd, lim, data) != SUCCESS)
@@ -129,8 +129,10 @@ int ft_heredoc(int **tab, t_token *token, t_data *data)
 int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
 {
     int *tab_heredoc;
+    int index_heredoc;
 
     tab_heredoc = NULL;
+    index_heredoc = 0;
     if (ft_heredoc(&tab_heredoc, token, data) != SUCCESS)
         return FAILURE;
     while (token)
@@ -138,22 +140,40 @@ int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
         if (token->grammaire == CMD)
         {
             if (t_lst_exec_add_back(exec, t_lst_exec_new()) != SUCCESS)
-                return (t_lst_exec_free_and_close(exec), ERROR_MALLOC);
+                return (t_lst_exec_free_and_close(exec), free_close_tab_heredoc(tab_heredoc), ERROR_MALLOC);
         }
         if (token->grammaire == CMD || token->grammaire == ARG)
         {
-            if (ft_join_2d_spe(&((t_lst_exec_last(*exec))->args), token->str) != SUCCESS)
-                return (t_lst_exec_free_and_close(exec), ERROR_MALLOC);
+            if (ft_join_2d_spe(&(t_lst_exec_last(*exec)->args), token->str) != SUCCESS)
+                return (t_lst_exec_free_and_close(exec), free_close_tab_heredoc(tab_heredoc), ERROR_MALLOC);
         }
-        if (token->grammaire == INFILE)
+        else if (token->grammaire == INFILE && t_lst_exec_last(*exec)->fd_in != -1)
         {
-
+            if (t_lst_exec_last(*exec)->fd_in > 2)
+                close (t_lst_exec_last(*exec)->fd_in);
+            t_lst_exec_last(*exec)->fd_in = open(token->next->str, O_RDONLY);
         }
-
-
-
-
-
+        else if (token->grammaire == OUTFILE && t_lst_exec_last(*exec)->fd_out != -1)
+        {
+            if (t_lst_exec_last(*exec)->fd_out > 2)
+                close (t_lst_exec_last(*exec)->fd_out);
+            t_lst_exec_last(*exec)->fd_out = open(token->next->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+        }
+        else if (token->grammaire == APPEND && t_lst_exec_last(*exec)->fd_out != -1)
+        {
+            if (t_lst_exec_last(*exec)->fd_out > 2)
+                close (t_lst_exec_last(*exec)->fd_out);
+            t_lst_exec_last(*exec)->fd_out = open(token->next->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
+        }
+        else if (token->grammaire == HEREDOC)
+        {
+            if (t_lst_exec_last(*exec)->fd_in > 2)
+                close (t_lst_exec_last(*exec)->fd_in);  
+            else if (t_lst_exec_last(*exec)->fd_in == -1)
+                close(tab_heredoc[index_heredoc]);
+            t_lst_exec_last(*exec)->fd_in = tab_heredoc[index_heredoc];
+            tab_heredoc[index_heredoc] = -2;// pour que je les closes pas depuis le tab de heredoc
+        }
 
         token = token->next; 
     }

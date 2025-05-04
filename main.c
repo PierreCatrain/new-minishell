@@ -64,4 +64,3 @@ int main(int argc, char **argv, char **envp)
     t_env_free(&data.env);
     return (0);
 }
-

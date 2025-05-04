@@ -71,3 +71,18 @@ void t_lst_exec_free_and_close(t_lst_exec **exec)
 		free(tmp);
 	}
 }
+
+void t_lst_exec_print(t_lst_exec *exec)
+{
+	while (exec)
+	{
+		int i = -1;
+		while (exec->args[++i])
+		{
+			printf("%s|", exec->args[i]);
+			printf("in:%d|", exec->fd_in);
+			printf("out:%d\n", exec->fd_out);
+		}
+		exec = exec->next;
+	}
+}

@@ -170,7 +170,7 @@ int ft_join_2d(char ***tab, char *str)
 }
 
 
-// en cas de probleme on free pas str
+// en cas de probleme on free pas str et on dup str plutot que de juste prendre son address
 int ft_join_2d_spe(char ***tab, char *str)
 {
 	char	**new;
@@ -182,7 +182,9 @@ int ft_join_2d_spe(char ***tab, char *str)
 	index = -1;
 	while (*tab && (*tab)[++index])
 		new[index] = (*tab)[index];
-	new[ft_strlen_2d(*tab)] = str;
+	new[ft_strlen_2d(*tab)] = ft_strdup(str);
+	if (new[ft_strlen_2d(*tab)] == NULL)
+		return (free_2d(*tab), ERROR_MALLOC);
 	new[ft_strlen_2d(*tab) + 1] = NULL;
 	free(*tab);
 	*tab = new;

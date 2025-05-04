@@ -59,8 +59,13 @@ int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
 
     // on fait notre liste chainee
     // a voir comment on gere les erreurs de fichier et les erreur de malloc et de heredoc
-    build_for_exec(token, exec, data);
+    if (build_for_exec(token, exec, data) != SUCCESS)
+        return (t_token_free(&token), FAILURE);
 
+    printf("resultat du parsing :\n");        
+    t_lst_exec_print(*exec);
+        
+    t_lst_exec_free_and_close(exec);
     t_token_free(&token);
     
     

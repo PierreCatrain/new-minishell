@@ -40,12 +40,12 @@ enum    grammaire
     ARG,
     INFILE_TEXT,
     OUTFILE_TEXT,
-    HEREDOC_TEXT,
     APPEND_TEXT,
+    HEREDOC_TEXT,
     INFILE,
     OUTFILE,
-    HEREDOC,
     APPEND,
+    HEREDOC,
     PIPE,
 };
 
@@ -88,6 +88,7 @@ void ft_print_2d_fd(char **str, int fd);
 int ft_append(char **str, char c);
 int is_whitespace(char c);
 int ft_join_2d(char ***tab, char *str);
+int ft_join_2d_spe(char ***tab, char *str);
 void	free_2d(char **str);
 int	ft_strlen_2d(char **str);
 int	ft_strcmp(char *str1, char *str2);
@@ -128,6 +129,7 @@ int	t_lst_exec_add_back(t_lst_exec **ls, t_lst_exec *new);
 t_lst_exec	*t_lst_exec_last(t_lst_exec *ls);
 t_lst_exec	*t_lst_exec_new(void);
 void t_lst_exec_free_and_close(t_lst_exec **exec);
+void t_lst_exec_print(t_lst_exec *exec);
 
 char	*ft_readline_heredoc(char *lim);
 
