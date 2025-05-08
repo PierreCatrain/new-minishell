@@ -37,6 +37,8 @@ int count_heredoc(int **tab, t_token *token)
 void free_close_tab_heredoc(int *tab)
 {
     int i = -1;
+    if (tab == NULL)
+        return ;
 
     while (tab[++i] != -3)
     {
@@ -65,7 +67,12 @@ int ft_get_heredoc_path(char **path)
 		if (access(*path, 0) != 0)
 			return (SUCCESS);
 		else
+        {
 			free(*path);
+            *path = ft_strdup("/tmp/.here_doc");
+            if (*path == NULL)
+                return ERROR_MALLOC;
+        }
 		index++;
 	}
 	ft_putstr_fd("minishell: heredoc failed\n", 2);
@@ -81,7 +88,7 @@ int	ft_complete_heredoc(int fd, char *lim, t_data *data)
 	line = ft_readline_heredoc(lim);// faut le revoir todo
 	if (line == NULL)
 		return (FAILURE);
-
+    printf("%s,,,,,%s\n", lim, line);
 	if (ft_strcmp(line, lim) != 0)
 	{
 		// if (ft_expand_here_doc(&line, data) != SUCCESS)//todo
@@ -116,8 +123,8 @@ int ft_heredoc(int **tab, t_token *token, t_data *data)
 
             (*tab)[++index] = open(path_heredoc, O_CREAT | O_RDWR | O_TRUNC, 0644);
             if ((*tab)[index] == -1)
-                return (free_close_tab_heredoc(*tab), FAILURE);
-            
+                return (free_close_tab_heredoc(*tab),free(path_heredoc), FAILURE);
+            free(path_heredoc);
             if (ft_complete_heredoc((*tab)[index], token->str, data) != SUCCESS)
                 return (free_close_tab_heredoc(*tab), FAILURE);
         }
@@ -174,8 +181,13 @@ int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
             t_lst_exec_last(*exec)->fd_in = tab_heredoc[index_heredoc];
             tab_heredoc[index_heredoc] = -2;// pour que je les closes pas depuis le tab de heredoc
         }
+        else if (token->grammaire == PIPE)
+        {
+            //je fais ca quand j aurais revu l exec
+        }
 
         token = token->next; 
     }
+    free_close_tab_heredoc(tab_heredoc);
     return SUCCESS;
 }

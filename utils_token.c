@@ -75,12 +75,12 @@ char *ft_trad_grammaire(int grammaire)
         "ARG",
 		"INFLE_TEXT",
         "OUTFILE_TEXT",
-        "HEREDOC_TEXT",
         "APPEND_TEXT",
+        "HEREDOC_TEXT",
         "INFILE",
         "OUTFILE",
-        "HEREDOC",
         "APPEND",
+        "HEREDOC",
         "PIPE"
     };
 	return trad[grammaire];

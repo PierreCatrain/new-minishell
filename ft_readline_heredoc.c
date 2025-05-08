@@ -68,8 +68,8 @@ char	*ft_readline_heredoc(char *lim)
 		read_str[1] = '\0';
 		if (read_str[0] == '\n')
 		{
-			if (ft_append(&new, read_str[0]) != SUCCESS)
-				return (free(read_str), NULL);
+			// if (ft_append(&new, read_str[0]) != SUCCESS)
+			//		return (free(read_str), NULL);
 			return (free(read_str), new);
 		}
 		else

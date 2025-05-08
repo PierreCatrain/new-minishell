@@ -16,7 +16,7 @@ void ft_grammaire_redirection_text(t_token **token)
 {
     while (*token)
     {
-        if ((*token)->grammaire == UNDEFINED && (*token)->prev && (*token)->prev->grammaire >= INFILE && (*token)->prev->grammaire <= APPEND)
+        if ((*token)->grammaire == UNDEFINED && (*token)->prev && (*token)->prev->grammaire >= INFILE && (*token)->prev->grammaire <= HEREDOC)
             (*token)->grammaire = (*token)->prev->grammaire - 4;
 
         if ((*token)->next != NULL)
