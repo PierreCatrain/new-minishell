@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:29:47 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 18:40:01 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 19:30:56 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,7 @@ int bultin_export(t_data *data, char **args);
 int bultin_cd(t_data *data, char **args);
 
 int	ft_occ(char *str, char c);
+int change_exit_status(int *exit_status, int new_exit);
+int match_env(char *str1, t_env *env);
 
 #endif

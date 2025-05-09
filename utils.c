@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 06:25:25 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 18:13:21 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 19:39:34 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,34 @@ int ft_join(char **str1, char *str2)
 	return (SUCCESS);
 }
 
+// on free pas la deuxieme
+int ft_join_spe(char **str1, char *str2)
+{
+    char	*new;
+	int		index_1;
+    int     index_2;
+
+	new = malloc((ft_strlen(*str1) + ft_strlen(str2) + 1) * sizeof(char));
+	if (new == NULL)
+		return (free(*str1), ERROR_MALLOC);
+	index_1 = 0;
+	while (*str1 && (*str1)[index_1])
+    {
+		new[index_1] = (*str1)[index_1];
+        index_1++;
+    }
+    index_2 = 0;
+    while (str2 && str2[index_2])
+    {
+        new[index_1 + index_2] = str2[index_2];
+        index_2++;
+    }
+	new[ft_strlen(*str1) + ft_strlen(str2)] = '\0';
+    free(*str1);
+    *str1 = new;
+	return (SUCCESS);
+}
+
 int	ft_count_itoa(int n)
 {
 	int	count;
@@ -181,4 +209,9 @@ int	ft_occ(char *str, char c)
 		index++;
 	}
 	return (0);
+}
+
+void change_exit_status(int *exit_status, int new_exit)
+{
+	*exit_status = new_exit;
 }
