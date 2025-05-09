@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:29:47 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 14:10:28 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 18:40:01 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ enum    grammaire
 typedef struct s_env
 {
 	char    *str;
+    int is_define;//0 quand il y a pas de egal et 1 quand il y en a un
     struct s_env	*prev;
 	struct s_env	*next;
 } t_env;
@@ -77,6 +78,7 @@ typedef struct s_lst_exec
 typedef struct s_data
 {
     t_env  *env;
+    char **historique_export;
     int exit_status;
 
 } t_data;
@@ -102,7 +104,7 @@ int ft_duplicate_envp(char **envp, t_data *data);
 
 int	t_env_add_back(t_env **ls, t_env *new);
 t_env	*t_env_last(t_env *ls);
-t_env	*t_env_new(char *str);
+t_env	*t_env_new(char *str, int is_define);
 void t_env_free(t_env **env);
 void	t_env_print(t_env *env, int fd);
 
@@ -137,5 +139,10 @@ int ft_exec(t_data *data, t_lst_exec *exec);
 int bultin_env(t_data *data);
 int bultin_echo(char **args);
 int bultin_unset(t_data *data, char **args);
+int bultin_pwd(void);
+int bultin_export(t_data *data, char **args);
+int bultin_cd(t_data *data, char **args);
+
+int	ft_occ(char *str, char c);
 
 #endif

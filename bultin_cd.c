@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bultin_data->env.c                                       :+:      :+:    :+:   */
+/*   bultin_cd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 12:36:14 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 17:32:20 by utilisateur      ###   ########.fr       */
+/*   Created: 2025/05/09 18:34:56 by utilisateur       #+#    #+#             */
+/*   Updated: 2025/05/09 18:42:03 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int bultin_env(t_data *data)
+int  bultin_cd(t_data *data, char **args)
 {
-    while (data->env && data->env->prev != NULL)
-		data->env = data->env->prev;
-	while (data->env)
-	{
-        if (data->env->is_define == 1)
-            printf("%s\n", data->env->str);
-		if (data->env->next)
-			data->env = data->env->next;
-		else
-			break;
-	}
-	while (data->env->prev)
-		data->env = data->env->prev;
+    // const char *new_dir = "/tmp";
+
+    if (chdir(args[1]) == 0) {
+        printf("Changement de répertoire réussi : \n");
+    } else {
+        perror("Erreur lors du changement de répertoire");
+    }
+
     return SUCCESS;
 }

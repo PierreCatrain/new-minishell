@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-01 06:25:25 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-01 06:25:25 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/01 06:25:25 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 18:13:21 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,4 +163,22 @@ int ft_itoa(char **str, int nbr)
 	    itoa[0] = '-';
     *str = itoa;
 	return (SUCCESS);
+}
+
+
+//0 quand on trouve pas et 1 quand on trouve
+int	ft_occ(char *str, char c)
+{
+	int	index;
+	int	count;
+
+	index = 0;
+	count = 0;
+	while (str[index])
+	{
+		if (str[index] == c)
+			return 1;
+		index++;
+	}
+	return (0);
 }

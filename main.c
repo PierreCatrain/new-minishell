@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:29:21 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:36 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 18:22:11 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ int ft_duplicate_envp(char **envp, t_data *data)
     int i = -1;
     while (envp[++i])
     {
-        if (t_env_add_back(&data->env, t_env_new(envp[i])) != SUCCESS)
+        if (t_env_add_back(&data->env, t_env_new(envp[i], 1)) != SUCCESS)
         {
             t_env_free(&data->env);
             return FAILURE;
         }
     }
+    return SUCCESS;
 }
 
 int main(int argc, char **argv, char **envp)
@@ -34,6 +35,7 @@ int main(int argc, char **argv, char **envp)
     t_data data;
 
     data.exit_status = 0;
+    
 
     if (argc != 1)
     {
@@ -63,7 +65,7 @@ int main(int argc, char **argv, char **envp)
     }
 
 
-    //truc a free
+    
     t_env_free(&data.env);
     return (0);
 }

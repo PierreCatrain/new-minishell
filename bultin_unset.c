@@ -6,19 +6,19 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 13:39:04 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 14:31:47 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 17:54:05 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int match_env(char *str1, char *str2)
+int match_env(char *str1, t_env *env)
 {
     int i = 0;
 
-    while (str1[i] && str2[i] && str1[i] == str2[i])
+    while (str1[i] && env->str[i] && str1[i] == env->str[i])
         i++;
-    if (str2[i] == '=')
+    if (env->str[i] == '=' || (env->is_define == 0 && ft_strlen(str1) <= ft_strlen(env->str)))
         return SUCCESS;
     return FAILURE;
 }
@@ -34,14 +34,12 @@ int bultin_unset(t_data *data, char **args)
             data->env = data->env->prev;
         while (data->env)
         {
-            if (match_env(args[i], data->env->str) == SUCCESS)
+            if (match_env(args[i], data->env) == SUCCESS)
             {
-                printf("    ici 1\n");
                 if (data->env->prev)
                     data->env->prev->next = data->env->next;
                 if (data->env->next)
                     data->env->next->prev = data->env->prev;
-                printf("    ici 2\n");
                 t_env *tmp;
                 
                 tmp = data->env;

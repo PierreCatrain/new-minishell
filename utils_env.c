@@ -6,13 +6,13 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 06:29:39 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 14:32:47 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/09 17:48:43 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-t_env	*t_env_new(char *str)
+t_env	*t_env_new(char *str, int is_define)
 {
 	t_env	*new;
 
@@ -21,6 +21,7 @@ t_env	*t_env_new(char *str)
 		return (NULL);
 	new->prev = NULL;
 	new->next = NULL;
+	new->is_define = is_define;
 	new->str = ft_strdup(str);
 	if (new->str == NULL)
 		return (free(new), NULL);
