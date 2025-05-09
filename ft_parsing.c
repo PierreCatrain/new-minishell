@@ -54,8 +54,8 @@ int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
     // grammaire
     if (grammaire(&token) != SUCCESS)
         return (t_token_free(&token), ERROR_GRAMMAIRE);
-    printf("juste apres grammaire\n");
-        t_token_print(token, 1, 2);
+    // printf("juste apres grammaire\n");
+        // t_token_print(token, 1, 2);
 
     // on fait notre liste chainee
     // a voir comment on gere les erreurs de fichier et les erreur de malloc et de heredoc

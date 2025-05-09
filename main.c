@@ -56,7 +56,8 @@ int main(int argc, char **argv, char **envp)
         input = readline("minishell ~ ");
         if (!input)
 			return (ft_putstr_fd("exit\n", 1), t_env_free(&data.env), 0);
-        ft_parsing(input, &data, &exec);
+        if (ft_parsing(input, &data, &exec) != SUCCESS)
+            return (t_env_free(&data.env), FAILURE);
     }
 
 
