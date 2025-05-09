@@ -64,7 +64,7 @@ int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
 
     printf("resultat du parsing :\n");        
     t_lst_exec_print(*exec);
-    //test on est sur moaad
+    //test on est sur test1
         
     t_lst_exec_free_and_close(exec);
     t_token_free(&token);
