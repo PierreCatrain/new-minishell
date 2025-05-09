@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 13:29:47 by picatrai          #+#    #+#             */
-/*   Updated: 2025-04-30 13:29:47 by picatrai         ###   ########.fr       */
+/*   Created: 2025/04/30 13:29:47 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 14:10:28 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,10 @@ void t_lst_exec_free_and_close(t_lst_exec **exec);
 void t_lst_exec_print(t_lst_exec *exec);
 
 char	*ft_readline_heredoc(char *lim);
+
+int ft_exec(t_data *data, t_lst_exec *exec);
+int bultin_env(t_data *data);
+int bultin_echo(char **args);
+int bultin_unset(t_data *data, char **args);
 
 #endif

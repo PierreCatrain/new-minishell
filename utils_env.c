@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_envp.c                                       :+:      :+:    :+:   */
+/*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-01 06:29:39 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-01 06:29:39 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/01 06:29:39 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 14:32:47 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void t_env_free(t_env **env)
 
 void	t_env_print(t_env *env, int fd)
 {
-	while (env->prev != NULL)
+	while (env && env->prev != NULL)
 		env = env->prev;
 	while (env)
 	{

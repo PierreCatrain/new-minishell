@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_for_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-03 12:12:58 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-03 12:12:58 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/03 12:12:58 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 13:13:48 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

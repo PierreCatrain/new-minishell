@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_lst_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-03 12:43:58 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-03 12:43:58 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/03 12:43:58 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 13:13:12 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void t_lst_exec_print(t_lst_exec *exec)
 		while (exec->args[++i])
 		{
 			printf("%s|", exec->args[i]);
-			printf("in:%d|", exec->fd_in);
-			printf("out:%d\n", exec->fd_out);
 		}
+		printf("in:%d|", exec->fd_in);
+		printf("out:%d\n", exec->fd_out);
 		exec = exec->next;
 	}
 }

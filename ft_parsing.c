@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-01 09:06:06 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-01 09:06:06 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/01 09:06:06 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 13:17:23 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
     // grammaire
     if (grammaire(&token) != SUCCESS)
         return (t_token_free(&token), ERROR_GRAMMAIRE);
-    // printf("juste apres grammaire\n");
-        // t_token_print(token, 1, 2);
+    printf("juste apres grammaire\n");
+        t_token_print(token, 1, 2);
 
     // on fait notre liste chainee
     // a voir comment on gere les erreurs de fichier et les erreur de malloc et de heredoc
@@ -66,7 +66,8 @@ int ft_parsing(char *input, t_data *data, t_lst_exec **exec)
     t_lst_exec_print(*exec);
     //test on est sur test2
         
-    t_lst_exec_free_and_close(exec);
+    
+    // t_lst_exec_free_and_close(exec);
     t_token_free(&token);
     
     

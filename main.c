@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-04-30 13:29:21 by picatrai          #+#    #+#             */
-/*   Updated: 2025-04-30 13:29:21 by picatrai         ###   ########.fr       */
+/*   Created: 2025/04/30 13:29:21 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/09 14:37:36 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int main(int argc, char **argv, char **envp)
 			return (ft_putstr_fd("exit\n", 1), t_env_free(&data.env), 0);
         if (ft_parsing(input, &data, &exec) != SUCCESS)
             return (t_env_free(&data.env), FAILURE);
+        ft_exec(&data, exec);
+        t_lst_exec_free_and_close(&exec);
     }
 
 
