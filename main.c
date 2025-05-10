@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:29:21 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 18:22:11 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 13:15:35 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,23 @@ int main(int argc, char **argv, char **envp)
     {
         char *input;
         t_lst_exec *exec;
+        int parse_res;
 
         exec = NULL;
 
         input = readline("minishell ~ ");
         if (!input)
 			return (ft_putstr_fd("exit\n", 1), t_env_free(&data.env), 0);
-        if (ft_parsing(input, &data, &exec) != SUCCESS)
+        parse_res = ft_parsing(input, &data, &exec);
+        if (parse_res >= FAILURE)
             return (t_env_free(&data.env), FAILURE);
-        ft_exec(&data, exec);
-        t_lst_exec_free_and_close(&exec);
+        else if (parse_res == SUCCESS)
+        {
+            if (ft_exec(&data, exec) != SUCCESS)
+                return (t_env_free(&data.env), t_lst_exec_free_and_close(&exec), FAILURE);
+            t_lst_exec_free_and_close(&exec);
+        }
     }
-
-
-    
     t_env_free(&data.env);
     return (0);
 }

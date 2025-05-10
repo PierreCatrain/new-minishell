@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 13:29:47 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 19:30:56 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 14:35:33 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,21 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 
 
 enum    status
 {
     SUCCESS = 0,
+    ERROR_GRAMMAIRE,
+    ERROR_ONLY_WHITESPACE,
+    ERROR_WITH_QUOTES,
+    ERROR_NOT_IN_PATH,
     FAILURE,
     ERROR_CONFIG,
     ERROR_MALLOC,
     ERROR_FILE,
-    ERROR_GRAMMAIRE,
-    ERROR_ONLY_WHITESPACE,
-    ERROR_WITH_QUOTES
+    ERROR_WITH_PIPE
 };
 
 enum    grammaire
@@ -98,6 +101,8 @@ int ft_join(char **str1, char *str2);
 int ft_itoa(char **str, int nbr);
 char *ft_trad_grammaire(int grammaire);
 int	is_input_only_whitespace(char *str);
+int ft_join_spe(char **str1, char *str2);
+char **ft_strdup_2d(char **tab);
 
 int ft_duplicate_envp(char **envp, t_data *data);
 
@@ -137,14 +142,15 @@ char	*ft_readline_heredoc(char *lim);
 
 int ft_exec(t_data *data, t_lst_exec *exec);
 int bultin_env(t_data *data);
-int bultin_echo(char **args);
+int bultin_echo(t_data *data, char **args);
 int bultin_unset(t_data *data, char **args);
-int bultin_pwd(void);
+int bultin_pwd(t_data *data);
 int bultin_export(t_data *data, char **args);
 int bultin_cd(t_data *data, char **args);
 
 int	ft_occ(char *str, char c);
-int change_exit_status(int *exit_status, int new_exit);
+void change_exit_status(int *exit_status, int new_exit);
 int match_env(char *str1, t_env *env);
+char	**ft_split(char *s, char c);
 
 #endif

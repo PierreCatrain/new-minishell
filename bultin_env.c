@@ -27,5 +27,5 @@ int bultin_env(t_data *data)
 	}
 	while (data->env->prev)
 		data->env = data->env->prev;
-    return SUCCESS;
+    return change_exit_status(&data->exit_status, 0), SUCCESS;
 }

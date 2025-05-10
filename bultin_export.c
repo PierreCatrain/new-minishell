@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 17:13:47 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 18:30:56 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 13:10:02 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int bultin_export(t_data *data, char **args)
     int i = 0;
     if (args[1] == NULL)
     {
-        printf("                par ici\n");
         while (data->env && data->env->prev != NULL)
             data->env = data->env->prev;
 	    while (data->env)
@@ -47,7 +46,7 @@ int bultin_export(t_data *data, char **args)
             else
                 break;
 	    }
-        return SUCCESS;
+        return change_exit_status(&data->exit_status, 0), SUCCESS;
     }
     while (args[++i])
     {
@@ -57,7 +56,7 @@ int bultin_export(t_data *data, char **args)
         {
             int res = ft_handle_export(args[i], data->env); 
             if (res == ERROR_MALLOC)
-                return (ERROR_MALLOC);
+                return (change_exit_status(&data->exit_status, 1), ERROR_MALLOC);
             else if (res == SUCCESS)
                 break;
             
@@ -66,7 +65,7 @@ int bultin_export(t_data *data, char **args)
             if (data->env->next == NULL)
             {
                 if (t_env_add_back(&(data->env), t_env_new(args[i], ft_occ(args[i], '='))) != SUCCESS)
-                    return FAILURE;
+                    return change_exit_status(&data->exit_status, 1), FAILURE;
                 break;
             }
             else
@@ -76,5 +75,5 @@ int bultin_export(t_data *data, char **args)
     while (data->env->prev)
         data->env = data->env->prev;
                 
-    return SUCCESS;
+    return change_exit_status(&data->exit_status, 0), SUCCESS;
 }

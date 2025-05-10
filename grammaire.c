@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   grammaire.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: picatrai <picatrai@student.42.fr>          #+#  +:+       +#+        */
+/*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-05-03 10:54:30 by picatrai          #+#    #+#             */
-/*   Updated: 2025-05-03 10:54:30 by picatrai         ###   ########.fr       */
+/*   Created: 2025/05/03 10:54:30 by picatrai          #+#    #+#             */
+/*   Updated: 2025/05/10 12:42:35 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

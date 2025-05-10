@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:34:56 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/10 11:21:22 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 12:07:01 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int ft_maj_pwd(t_data *data)
 
     tmp = NULL;
     if (getcwd(path, 1024) == NULL)
-        return change_exit_status(&data->exit_status, 1), FAILURE;// pas sur du return todo
+        return change_exit_status(&data->exit_status, 0), SUCCESS;// pas sur du return todo
     
     
     while (data->env->prev)
@@ -33,9 +33,9 @@ int ft_maj_pwd(t_data *data)
                 return (ERROR_MALLOC);
             free(data->env->str);
             data->env->str = NULL;
-            if (ft_join_spe(data->env->str, "PWD=") != SUCCESS)
+            if (ft_join_spe(&(data->env->str), "PWD=") != SUCCESS)
                 return ERROR_MALLOC;
-            if (ft_join_spe(data->env->str, path) != SUCCESS)
+            if (ft_join_spe(&(data->env->str), path) != SUCCESS)
                 return ERROR_MALLOC;
         }
         if (data->env->next)
@@ -49,7 +49,12 @@ int ft_maj_pwd(t_data *data)
     {
         if (match_env("OLDPWD", data->env) == SUCCESS)
         {
-
+            free(data->env->str);
+            data->env->str = NULL;
+            if (ft_join_spe(&(data->env->str), "OLDPWD=") != SUCCESS)
+                return free(tmp), ERROR_MALLOC;
+            if (ft_join_spe(&(data->env->str), tmp) != SUCCESS)
+                return free(tmp), ERROR_MALLOC;
         }
             
         if (data->env->next)
@@ -57,7 +62,9 @@ int ft_maj_pwd(t_data *data)
         else
             break;
     }
-    return SUCCESS;
+    while (data->env->prev)
+        data->env = data->env->prev;
+    return free(tmp), SUCCESS;
 }
 
 int  bultin_cd(t_data *data, char **args)

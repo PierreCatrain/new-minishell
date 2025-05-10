@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:12:58 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 13:13:48 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 12:36:13 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,19 @@ int ft_heredoc(int **tab, t_token *token, t_data *data)
     return SUCCESS;
 }
 
+void close_pipe(int fd)
+{
+    if (fd > 2)
+        close(fd);
+}
+
 int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
 {
     int *tab_heredoc;
     int index_heredoc;
+    int tmp_in_pipe;
 
+    tmp_in_pipe = -2;
     tab_heredoc = NULL;
     index_heredoc = 0;
     if (ft_heredoc(&tab_heredoc, token, data) != SUCCESS)
@@ -147,7 +155,9 @@ int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
         if (token->grammaire == CMD)
         {
             if (t_lst_exec_add_back(exec, t_lst_exec_new()) != SUCCESS)
-                return (t_lst_exec_free_and_close(exec), free_close_tab_heredoc(tab_heredoc), ERROR_MALLOC);
+                return (t_lst_exec_free_and_close(exec), free_close_tab_heredoc(tab_heredoc), close(tmp_in_pipe), ERROR_MALLOC);
+            if ((*exec)->next)
+                t_lst_exec_last(*exec)->fd_in = tmp_in_pipe;
         }
         if (token->grammaire == CMD || token->grammaire == ARG)
         {
@@ -183,7 +193,12 @@ int build_for_exec(t_token *token, t_lst_exec **exec, t_data *data)
         }
         else if (token->grammaire == PIPE)
         {
-            //je fais ca quand j aurais revu l exec
+            int fd[2];
+
+            if (pipe(fd) == -1)
+                return free_close_tab_heredoc(tab_heredoc), ERROR_WITH_PIPE;
+            (*exec)->fd_out = fd[1];
+            tmp_in_pipe = fd[0];
         }
 
         token = token->next; 

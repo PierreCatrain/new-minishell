@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:52:47 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 13:28:14 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 13:08:08 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int ft_check_option_valid_echo(char *arg)
     return SUCCESS;
 }
 
-int bultin_echo(char **args)
+int bultin_echo(t_data *data, char **args)
 {
     int i = 0;//on skip echo
     int find_option = 0;
@@ -49,6 +49,6 @@ int bultin_echo(char **args)
     }
     if (find_option == 0)
         printf("\n");
-    return SUCCESS;
+    return change_exit_status(&data->exit_status, 0), SUCCESS;
 }
 

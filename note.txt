@@ -16,4 +16,14 @@ question
 
     changer le atoi
 
-revoir le readline_heredoc
+revoir le readline_heredoc et split
+
+truc a faire bonus
+    ~ et - pour cd
+
+rajouter des messages d erreurs notament pour les erreures mallocs
+
+
+faire dup2
+faire cas avec 1 noeud
+exit bultin

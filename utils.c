@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 06:25:25 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 19:39:34 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 14:35:17 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,30 @@ char	*ft_strdup(char *str)
 		new[index] = str[index];
 	new[index] = '\0';
 	return (new);
+}
+
+char **ft_strdup_2d(char **tab)
+{
+	char **new;
+	
+	new = malloc((ft_strlen_2d(tab) + 1) * sizeof(char *));
+	if (new == NULL)
+		return NULL;
+	
+	int i = -1;
+	while (tab[++i])
+	{
+		new[i] = ft_strdup(tab[i]);
+		if (new[i] == NULL)
+		{
+			while (--i >= 0)
+				free(new[i]);
+			free(new);
+			return NULL;
+		}
+	}
+	new[i] = NULL;
+	return new;
 }
 
 void ft_print_2d_fd(char **str, int fd)

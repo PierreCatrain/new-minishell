@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 13:39:04 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 17:54:05 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 13:08:25 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int bultin_unset(t_data *data, char **args)
 {
     int i = 0;
     if (data->env == NULL)
-        return SUCCESS;
+        return change_exit_status(&data->exit_status, 0), SUCCESS;
     while (args[++i])
     {
         while (data->env->prev)
@@ -63,5 +63,5 @@ int bultin_unset(t_data *data, char **args)
     }
     while (data->env->prev)
         data->env = data->env->prev;
-    return SUCCESS;
+    return change_exit_status(&data->exit_status, 130), SUCCESS;
 }

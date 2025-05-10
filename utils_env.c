@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 06:29:39 by picatrai          #+#    #+#             */
-/*   Updated: 2025/05/09 17:48:43 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 12:00:51 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ void	t_env_print(t_env *env, int fd)
 		env = env->prev;
 	while (env)
 	{
-		ft_putstr_fd(env->str, fd);
-		ft_putstr_fd("\n", fd);
+		// ft_putstr_fd(env->str, fd);
+		// ft_putstr_fd("\n", fd);
+		printf("%s|||%d\n", env->str, env->is_define);
 		env = env->next;
 	}
 }
