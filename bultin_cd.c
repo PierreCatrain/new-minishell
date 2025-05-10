@@ -6,7 +6,7 @@
 /*   By: utilisateur <utilisateur@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 18:34:56 by utilisateur       #+#    #+#             */
-/*   Updated: 2025/05/09 19:49:30 by utilisateur      ###   ########.fr       */
+/*   Updated: 2025/05/10 11:21:22 by utilisateur      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int ft_maj_pwd(t_data *data)
     char *tmp;
     char path[1024];//mettre path max todo
 
+    tmp = NULL;
     if (getcwd(path, 1024) == NULL)
         return change_exit_status(&data->exit_status, 1), FAILURE;// pas sur du return todo
     
@@ -27,15 +28,15 @@ int ft_maj_pwd(t_data *data)
     {
         if (match_env("PWD", data->env) == SUCCESS)
         {
+            tmp = ft_strdup(&(data->env->str[4]));
+            if (tmp == NULL)
+                return (ERROR_MALLOC);
             free(data->env->str);
             data->env->str = NULL;
             if (ft_join_spe(data->env->str, "PWD=") != SUCCESS)
                 return ERROR_MALLOC;
             if (ft_join_spe(data->env->str, path) != SUCCESS)
                 return ERROR_MALLOC;
-            tmp = ft_strdup(&(data->env->str[4]));
-            if (tmp == NULL)
-                return (ERROR_MALLOC);
         }
         if (data->env->next)
             data->env = data->env->next;
@@ -48,7 +49,7 @@ int ft_maj_pwd(t_data *data)
     {
         if (match_env("OLDPWD", data->env) == SUCCESS)
         {
-            
+
         }
             
         if (data->env->next)
